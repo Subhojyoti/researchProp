@@ -1,0 +1,171 @@
+We propose a variant of UCB algorithm, henceforth referred to as ClusUCB, that incorporates clustering and an improved exploration scheme. ClusUCB is a round-based algorithm that
+starts with a partition of the arms into small clusters, each having same number of arms. 
+The clustering is done at the start with a pre-specified number of clusters. 
+Each round of ClusUCB involves both (individual) arm elimination as well as cluster elimination. 
+
+%While the conditions governing the arm and cluster eliminations are inspired by UCB-Improved, the exploration factors governing these conditions are relatively more aggressive than that in UCB-Improved. 
+
+The clustering of arms provides two benefits. First, it creates a context where UCB-Improved like algorithm can be run in parallel on smaller sets of arms with limited exploration, which could lead to fewer pulls of sub-optimal arms with the help of  more aggressive elimination of sub optimal arms. Second, the cluster elimination leads to whole sets of sub-optimal arms being simultaneously eliminated when they are found to yield poor results. These two simultaneous criteria for arm elimination can be seen as borrowing the strengths of UCB-Improved as well as other popular round based approaches.
+
+The motivation for our work stems from the remark in Section 2.4.3 of \cite{bubeck2012bandits}, where the authors conjecture that one should be able to obtain a bandit algorithm with a
+gap-dependent regret bound that is better than MOSS (\cite{audibert2009minimax}) and UCB-Improved (\cite{auer2010ucb}), in particular, with a regret bound of the order 
+$O\left(\dfrac{K\log (\frac{T}{H})}{\Delta}\right)$, where $H = \sum_{i:\Delta_i>0} \frac{1}{\Delta_i^2}$. While ClusUCB does not achieve the conjectured regret bound, 
+the theoretical analysis establishes
+% that involves carefully setting the exploration factors for arm and cluster elimination conditions, we observe
+that the gap-dependent regret of ClusUCB is always better than that of UCB-Improved and better than that of MOSS when $\sqrt{\frac{e}{T}} \leq \Delta\leq 1$ (see Table \ref{tab:regret-bds}). Moreover, the gap-independent bound of ClusUCB is of the same order as UCB-Improved, i.e., $O\left(\sqrt{KT\log K}\right)$. However, ClusUCB is not able to match the gap-independent bound of $O(\sqrt{KT})$ for MOSS.
+
+
+% 	To counter early exploration in \cite{liu2016modification} as well as in our algorithm we propose an exploration regulatory factor to control exploration. \textit{Our algorithm is also not an anytime algorithm}(neither is MOSS, UCB-Improved) and in this context we point out that knowledge of the horizon actually facilitates learning as it can exploit more information(as stated in \cite{lattimore2015optimally}). We also employ a couple of more strategies to bring down our regret as summarized below:-
+
+
+\begin{table}
+\caption{Gap-dependent regret bounds for different bandit algorithms}
+\label{tab:regret-bds}
+\begin{center}
+\begin{tabular}{|c|c|}
+\toprule
+Algorithm  & Upper bound \\
+\midrule
+UCB1         &$O\left(\dfrac{K\log T}{\Delta}\right)$ \\\midrule
+UCB-Improved &$O\left(\dfrac{K\log (T\Delta^{2})}{\Delta}\right)$ \\\midrule
+MOSS	     &$O\left(\dfrac{K^{2}\log\left(T\Delta^{2}/K\right)}{\Delta}\right)$\\\midrule
+ClusUCB      &$O\left(\dfrac{K\log\left(\dfrac{T\Delta^{2}}{\sqrt{\log (KT)}}\right)}{\Delta}\right)$\\\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+%%%%%%%%%%%%%%%% alg-custom-block %%%%%%%%%%%%
+\algblock{ArmElim}{EndArmElim}
+\algnewcommand\algorithmicArmElim{\textbf{\em Arm Elimination}}
+ \algnewcommand\algorithmicendArmElim{}
+\algrenewtext{ArmElim}[1]{\algorithmicArmElim\ #1}
+\algrenewtext{EndArmElim}{\algorithmicendArmElim}
+
+\algblock{ClusElim}{EndClusElim}
+\algnewcommand\algorithmicClusElim{\textbf{\em Cluster Elimination}}
+ \algnewcommand\algorithmicendClusElim{}
+\algrenewtext{ClusElim}[1]{\algorithmicClusElim\ #1}
+\algrenewtext{EndClusElim}{\algorithmicendClusElim}
+
+\algtext*{EndArmElim}
+\algtext*{EndClusElim}
+
+\begin{algorithm}[t]
+\caption{ClusUCB}
+\label{alg:clusucb}
+\begin{algorithmic}
+\State {\bf Input:} Number of clusters $p$, time horizon $T$, exploration parameters $\rho_a$, $\rho_s$ and $\psi$.
+\State {\bf Initialization:} Set $B_{0}:=A$, $S_0 = S$ and $\epsilon_{0}:=1$.
+\State Create a partition $S_0$ of the arms at random into $p$ clusters of size up to $\ell=\bigg\lceil \dfrac{K}{p} \bigg\rceil$ each.
+\State \For{$m=0,1,..\big \lfloor \dfrac{1}{2}\log_{2} \dfrac{T}{e}\big\rfloor$}{	
+\State Pull each arm in $B_m$ so that the total number of times it has been pulled is $n_{m}=\bigg\lceil\dfrac{2\log{(\psi T\epsilon_{m}^{2})}}{\epsilon_{m}}\bigg\rceil$. 
+% A partition of $A$ into clusters from Algorithm \ref{alg:rua}
+%\State \hspace*{2em} Calculate $w_{s_{i}}=\bigg\lceil\dfrac{1}{\ell\hat{\Delta}_{s_{i}}}\bigg\rceil$,if $\hat{\Delta}_{s_{i}}\neq 0, \forall s_{i}\in S$
+%\newline\hspace*{8em}$=1$, otherwise, and $\hat{\Delta}_{s_{i}}=\max_{i\in s_{i}}{\lbrace\hat{r}_{i}\rbrace}-\min_{j\in s_{i}}{\lbrace\hat{r}_{j}\rbrace}, i\neq j$
+\ArmElim
+\State For each cluster $s_k \in S_{m}$, delete arm ${i}\in s_{k}$ from $B_{m}$ if
+\begin{align*}
+\hat{r}_{i} + \sqrt{\dfrac{\rho_{a}\log{(\psi T\epsilon_{m}^{2})}}{2 n_{m}}}  < \max_{{j}\in s_{k}}\bigg\lbrace\hat{r}_{j} -\sqrt{\dfrac{\rho_{a}\log{(\psi T\epsilon_{m}^{2})}}{2 n_{m}}} \bigg\rbrace
+\end{align*}
+% where $\rho_{a}=\dfrac{1}{w_{m}}$ and remove all such arms from $B_{m}$.
+\EndArmElim
+\ClusElim
+\State Delete cluster $s_{k}\in S_{m}$ and remove all arms $i\in s_{k}$ from $B_{m}$ if 
+\begin{align*}
+ \max_{{i}\in s_{k}}\bigg\lbrace\hat{r}_{i} + \sqrt{\dfrac{\rho_{s}\log{(\psi T\epsilon_{m}^{2})}}{2 n_{m}}}\bigg\rbrace  \\
+ < \max_{{j}\in B_{m}} \bigg\lbrace\hat{r}_{j} - \sqrt{\dfrac{\rho_{s} \log{(\psi T\epsilon_{m}^{2})}}{2 n_{m}}}\bigg\rbrace.
+\end{align*}
+%  and remove all such arms in the cluster $s_{k}$ from $B_{m}$ to obtain $B_{m+1}$.
+\EndClusElim
+\State Set $\epsilon_{m+1}:=\dfrac{\epsilon_{m}}{2}$\vspace{0.5ex}
+\State Set $B_{m+1}:=B_{m}$
+%\State \hspace*{2em} $\ell_{m+1}:=\min\lbrace 2\ell_{m}, K\rbrace$
+%\State \hspace*{2em} $w_{m+1}:=2w_{m}$
+\State Stop if $|B_{m}|=1$ and pull ${i}\in B_{m}$ till $T$ is reached.}
+%\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+%\todos[inline]{Shouldn't there be a $\psi$ inside the log term on RHS of both elim conditions of Algorithm \ref{alg:clusucb}? (Subho) Addressed: $\psi$ has to be there}
+
+As mentioned in a recent work \cite{liu2016modification}, UCB-Improved has two shortcomings: 	\\
+%\begin{inparaenum}[\bfseries(i)]
+\begin{itemize}
+\item A significant number of pulls are spent in early exploration, since each round $m$ of UCB-Improved involves pulling every arm an identical $n_{m}=\bigg\lceil \dfrac{ 2\log(T\epsilon^{2}_{m})}{\epsilon^{2}_{m}} \bigg\rceil$ number of times. The quantity $\epsilon_{m}$ is initialized to $1$ and halved after every round.\\
+\item In UCB-Improved, arms are eliminated conservatively, i.e, only after $\epsilon_{m}<\dfrac{\Delta_{i}}{2}$, the sub-optimal arm $i$ is discarded with high probability. This is disadvantageous when $K$ is large and the gaps are identical ($r_{1}=r_{2}=..=r_{K-1}<r^{*}$) and small.\\
+\end{itemize}
+
+%\end{inparaenum}
+To reduce early exploration, the number $n_m$ of times each arm is pulled per round in ClusUCB is lower than that of UCB-Improved and also that of Median-Elimination, which used $n_m=\dfrac{4}{\epsilon^{2}}\log\big(\dfrac{3}{\delta}\big)$, where $\epsilon,\delta$ are confidence parameters.
+To handle the second problem mentioned above, ClusUCB partitions the larger problem into several small sub-problems using clustering and then performs local exploration aggressively to eliminate sub-optimal arms within each clusters with high probability.
+
+
+As described in the pseudocode in Algorithm~\ref{alg:clusucb}, ClusUCB begins with a initial clustering of arms that is performed by random uniform allocation. The set of clusters $S$ thus obtained satisfies $|S|=p$, with individual clusters having a size that is bounded above by $\ell=\bigg\lceil \dfrac{K}{p} \bigg\rceil$.
+Each round of ClusUCB involves both individual arm as well as cluster elimination conditions. These elimination conditions are inspired by UCB-Improved. Notice that, unlike UCB-Improved, there is no longer a single point of reference based on which we are eliminating arms. Instead now we have as many reference points to eliminate arms as number of clusters formed. 
+%Further, the exploration factors $\rho_{a}\in (0,1]$ and $\rho_{s}\in (0,1]$ governing the arm and cluster elimination conditions, respectively, are relatively more aggressive than that in UCB-Improved. 
+
+The exploration regulatory factor $\psi$ governing the arm and cluster elimination conditions in ClusUCB is more aggressive than that in UCB-Improved. With appropriate choice of $\psi$ and $\rho_a$ and $\rho_s$ we can achieve aggressive elimination even when the gaps $\Delta_i$ are small and $K$ is large. 
+
+%and the gaps $\Delta_i$ are small, it is efficient to remove sub-optimal arms quickly. 
+
+In \cite{liu2016modification}, the authors recommend incorporating a factor of $d_i$ inside the log-term of the UCB values, i.e., $\max \lbrace\hat{r}_{i}+\sqrt{\frac{d_{i}\log T{\epsilon}_{m}^{2}}{2n_{m}}}\rbrace$. 
+The authors there examine the following choices for $d_i$: $\frac{T}{t_{i}}$, $\frac{\sqrt{T}}{t_{i}}$ and $\frac{\log T}{t_{i}}$, where $t_{i}$ is the number of times an arm ${i}$ has been sampled.
+Unlike \cite{liu2016modification}, we employ cluster as well as arm elimination and establish from a theoretical analysis that the choice $\psi=\frac{T}{\log (KT)}$ helps in achieving a better gap-dependent regret upper bound for ClusUCB as compared to UCB-Improved and MOSS.
+
+	We also approach the threshold bandit setup with a similar type of algorithm. The algorithm Augmented UCB is presented below:-
+
+%%%%%%%%%%%%%%%%% alg-custom-block %%%%%%%%%%%%
+%\algblock{ArmElim}{EndArmElim}
+%\algnewcommand\algorithmicArmElim{\textbf{\em Arm Elimination}}
+% \algnewcommand\algorithmicendArmElim{}
+%\algrenewtext{ArmElim}[1]{\algorithmicArmElim\ #1}
+%\algrenewtext{EndArmElim}{\algorithmicendArmElim}
+%\algtext*{EndArmElim}
+
+\begin{algorithm}[t]
+\caption{AugmentedUCB}
+\label{alg:augucb}
+\begin{algorithmic}
+\State {\bf Input:} Time horizon $T$, exploration parameters $\rho$ and $\psi$, threshold $\tau$.
+\State {\bf Initialization:} Set $B_{0}:=A$,$\gamma=\big\lfloor \dfrac{1}{2}\log_{2} \dfrac{T}{e}\big\rfloor $, $m:=0$ and $\epsilon_{0}:=1$.
+\State Pull each arm once
+%\State \For{$m=0,1,..\big \lfloor \dfrac{1}{2}\log_{2} \dfrac{T}{e}\big\rfloor$}{	
+\State $N_{0}=\big\lfloor \dfrac{T}{\gamma} \big\rfloor$
+\State \For{$t=K+1,..,T$}{	
+\State Pull arm $i$ in $B_m$ such that $\min_{i\in B_{m}}\bigg\lbrace |\hat{r}_{i} - \tau | - \sqrt{\dfrac{\rho \log (\psi T \epsilon_{m}^{2})}{2 n_{i}}} \bigg\rbrace$, where $n_{i}$ is the number of times the arm $i$ has been pulled. 
+\State \If{$t\geq N_{m}$}{
+\ArmElim
+\State For each arm $i \in B_{m}$, remove arm ${i}$ from $B_{m}$ if
+\begin{align*}
+\hat{r}_{i} + \sqrt{\dfrac{\rho\log{(\psi T\epsilon_{m}^{2})}}{2 n_{i}}}  < \tau -\sqrt{\dfrac{\rho\log{(\psi T\epsilon_{m}^{2})}}{2 n_{i}}} 
+\end{align*}
+\State For each arm $i \in B_{m}$, remove arm ${i}$ from $B_{m}$ if
+\begin{align*}
+\hat{r}_{i} - \sqrt{\dfrac{\rho\log{(\psi T\epsilon_{m}^{2})}}{2 n_{i}}}  > \tau +\sqrt{\dfrac{\rho\log{(\psi T\epsilon_{m}^{2})}}{2 n_{i}}} 
+\end{align*}
+\EndArmElim
+\State $\epsilon_{m+1}:=\dfrac{\epsilon_{m}}{2}$
+\State $B_{m+1} := B_{m}$
+%\State $p_{m+1}:=p_{m}+1$
+%\State $\gamma := \dfrac{p+1}{p}$
+\State $N_{m+1} := N_{m} + \big\lfloor \dfrac{T}{\gamma} \big\rfloor$
+% + \lfloor\gamma N_{m}\rfloor $
+\State $m := m+1$
+}
+}
+%\EndFor
+\State Output $J_{\tau}=\lbrace i: \hat{r}_{i}\geq \tau \rbrace$.
+\end{algorithmic}
+\end{algorithm}
+
+In algorithm \ref{alg:augucb} hence referred to as AugUCB we have three input parameters, $\rho$ which is the arm elimination parameter, $\psi$ which is the exploration regulatory factor and the threshold $\tau$. The salient feature of the algorithm is listed below:-
+\begin{itemize}
+\item AugUCB combines the power of UCB-Improved (\cite{auer2010ucb}) , APT (\cite{locatelli2016optimal}) and SAR (\cite{gabillon2011multi}). To make it an anytime algorithm, we no longer pull all the arms equal number of times in each round but pull arm that minimizes the condition as specified.
+\item This also gets rid of the excessive initial exploration employed by UCB-Improved and yet with suitable choice of $\rho$ and $\psi$ \cite{liu2016modification} we can fine tune the exploration.
+\item $\min_{i\in B_{m}}\bigg\lbrace |\hat{r}_{i} - \tau | - \sqrt{\dfrac{\rho \log (\psi T \epsilon_{m}^{2})}{2 n_{i}}} \bigg\rbrace$ condition actually makes it possible to pull the arms closer to the threshold $\tau$. This is a strategy used by APT.
+\item The arm elimination condition simply removes arm(s) if the algorithm is sufficiently sure that are very high or very low about the threshold. This although is a tactic similar to SAR, but here at any round, an arbitrary number of arms can be accepted or rejected thereby improving upon SAR which accepts/rejects one arm in every round.
+\item Also it doesn't matter how many arms are there in $B_{m}$, as the algorithm outputs all the arms whose estimated average payoff is above the threshold $\tau$ thereby making this an anytime algorithm whereby we need not finish every round.
+\item The arm elimination condition(s) simply help in re-allocating the remaining budget/pulls among the arms while those among the remaining arms are pulled which are closer to the threshold. Arms lying far to the either side of the threshold are eliminated from the active set $B_{m}$.
+\end{itemize}
