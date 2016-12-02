@@ -1,90 +1,217 @@
-In this appendix, we show the different experiments carried on various test-beds. Appendix A contains experiments on ClusUCB while Appendix B contains experiment on AugUCB.
+In this appendix, we show the different experiments carried on various test-beds. Appendix A contains experiments on ClusUCB while Appendix B contains experiments on AugUCB.
 
 \subsection*{Appendix A}
 \label{AppendixA}
 For the purpose of performance comparison using cumulative regret as the metric, we implement the following algorithms:  KL-UCB\cite{garivier2011kl}, DMED\cite{honda2010asymptotically}, MOSS\cite{audibert2009minimax}, UCB1\cite{auer2002finite}, UCB-Improved\cite{auer2010ucb}, Median Elimination\cite{even2006action}, Thompson Sampling(TS)\cite{agrawal2011analysis} and UCB-V\cite{audibert2009exploration}\footnote{The implementation for KL-UCB and DMED were taken from \cite{CapGarKau12}}. The parameters of ClusUCB algorithm for all the experiments are set as follows: $\psi=\log T$, $\rho_{s}=\frac{1}{2^{2m+1}}$ and $\rho_{a}=\frac{1}{2^{4m+1}}$ for $m=0,1,..., \lfloor \frac{1}{2}\log_{2} \frac{T}{e}\rfloor$. So in all the experiments $\rho_{a}$ and $\rho_{s}$ are initialized to $1$ and then reduced after every round. By this definition of $\rho_{a},\rho_{s}$ we have made sure that their value always remain bounded $\in(0,1]$. When $K$ is large and $p$ is small it is advantageous to run $\rho_{a} < \rho_{s}$ because this will aggressively eliminate arms within each cluster while full cluster elimination will be more conservative. 
 
-\begin{figure*}
-\centering
-  %\begin{tabular}{ccc}
-%%%%% expt1  
-  %\begin{subfigure}{0.32\textwidth}
- %\tabl{c}{\scalebox{0.6}{
- \begin{tikzpicture}
-      \begin{axis}[
-	xlabel={timestep},
-	ylabel={Cumulative regret},
-       clip mode=individual,grid,grid style={gray!30},
-  legend style={at={(0.5,-0.2)},anchor=north,legend columns=3} ]  
-  % UCB    
+\begin{figure}
+    \centering
+    \begin{tabular}{ccc}
+    \subfigure[Experiment $1$: $20$ Bernoulli-distributed arms with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$.]
+    {
+    		\pgfplotsset{
+		tick label style={font=\Large},
+		label style={font=\Large},
+		%legend style={font=\footnotesize}
+		}
+        \begin{tikzpicture}[scale=0.5]
+      	\begin{axis}[
+		xlabel={timestep},
+		ylabel={Cumulative Regret},
+		grid=major,
+        %clip mode=individual,grid,grid style={gray!30},
+        clip=true,
+        %clip mode=individual,
+  		legend style={at={(0.5,-0.2)},anchor=north, legend columns=3} ]
+      	% UCB
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB_Vcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/DMEDcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/KLUCBcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/MOSScomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB1comp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/TScomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/clUCBcomp_subsampled.txt};
+      	\legend{UCB-V,DMED,KL-UCB,MOSS,UCB1,TS,ClusUCB(p=4)}
+      	\end{axis}
+      	\end{tikzpicture}
+  		\label{fig:1}
+    }
+    %\\
+    &
+    \subfigure[Experiment $2$: $100$ Gaussian-distributed arms with $r_{i_{{i}\neq {*}:1-33}}=0.01$, $r_{i_{{i}\neq {*}:34-99}}=0.06$ and $r^{*}_{i=100}=0.1$.]
+    {
+    		\pgfplotsset{
+		tick label style={font=\Large},
+		label style={font=\Large},
+		%legend style={font=\footnotesize}
+		}
+        \begin{tikzpicture}[scale=0.5]
+        \begin{axis}[
+		xlabel={timestep},
+		ylabel={Cumulative Regret},
+        %clip mode=individual,grid,grid style={gray!30},
+       	grid=major,
+       	clip=true,
+  		legend style={at={(0.5,-0.2)},anchor=north, legend columns=3} ]
+      	% UCB
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/clUCBNCcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/clUCBCcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/Med_Elimcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/UCB_Improvedcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/MOSScomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/UCB1comp_subsampled.txt};
+      	\legend{ClusUCB-AE(p=1),ClusUCB(p=20),Med-Elim,UCB-Improved,MOSS,UCB1}
+      	\end{axis}
+      	\end{tikzpicture}
+   		\label{fig:2}
+    }
+    &
+    \subfigure[Experiment $3$: $20$ to $500$ Bernoulli-distributed arms with $r_{i_{{i}\neq {*}}}=0.05$ and $r^{*}=0.1$. ]
+    {
+    		\pgfplotsset{
+		tick label style={font=\Large},
+		label style={font=\Large},
+		%legend style={font=\footnotesize}
+		}
+        \begin{tikzpicture}[scale=0.5]
+        \begin{axis}[
+		xlabel={timestep},
+		ylabel={Cumulative Regret},
+        %clip mode=individual,grid,grid style={gray!30},
+		grid=major,
+		clip=true,
+  		legend style={at={(0.5,-0.2)},anchor=north, legend columns=3} ]
+        % UCB
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt3/clUCB20_500_1.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt3/MOSS20_500.txt};
+      	\legend{ClusUCB(p=K/10),MOSS}
+      	\end{axis}
+      	\label{fig:3}
+        \end{tikzpicture}
+    }
+    \end{tabular}
+    \caption{Cumulative regret for various bandit algorithms on three stochastic K-armed bandit environments. }
+    \label{fig:karmed}
+\end{figure}
 
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB_Vcomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/DMEDcomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/KLUCBcomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/MOSScomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB1comp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/TScomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/clUCBcomp_subsampled.txt};
-      \legend{UCB-V,DMED,KL-UCB,MOSS,UCB1,TS,ClusUCB(p=4)}
-      \end{axis}
-      \end{tikzpicture}
-      %}\\}
-			\caption{Experiment $1$: $20$ Bernoulli-distributed arms with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$.}
-  \label{fig:1}
-  %\end{subfigure}
-	%&
-	%%%%%%% Expt 2
-	  %\begin{subfigure}{0.32\textwidth}
- %\tabl{c}{\scalebox{0.6}{
- \begin{tikzpicture}
-      \begin{axis}[
-	xlabel={timestep},
-	ylabel={Cumulative regret},
-       clip mode=individual,grid,grid style={gray!30},
-  legend style={at={(0.5,-0.2)},anchor=north,legend columns=3} ]
-      % UCB
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/clUCBNCcomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/clUCBCcomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/Med_Elimcomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/UCB_Improvedcomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/MOSScomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/UCB1comp_subsampled.txt};
-      \legend{ClusUCB-AE(p=1),ClusUCB(p=20),Med-Elim,UCB-Improved,MOSS,UCB1}
-      \end{axis}
-      \end{tikzpicture}
-      %}\\}
-			\caption{Experiment $2$: $100$ Gaussian-distributed arms with $r_{i_{{i}\neq {*}:1-33}}=0.01$, $r_{i_{{i}\neq {*}:34-99}}=0.06$ and $r^{*}_{i=100}=0.1$.}
-  \label{fig:2}
-  %\end{subfigure}
-	%&
-	\end{figure*}		
-	
-	\begin{figure*}
-	\centering
-	%%%%%%% Expt 3
-	  %\begin{subfigure}{0.32\textwidth}
- %\tabl{c}{\scalebox{0.6}{
- \begin{tikzpicture}
-      \begin{axis}[
-	xlabel={Arms},
-	ylabel={Cumulative regret},
-       clip mode=individual,grid,grid style={gray!30},
-  legend style={at={(0.5,-0.2)},anchor=north,legend columns=-1} ]
-      % UCB
-%\addplot table[x index=0,y index=1,col sep=tab] {results/Expt3/clUCB20_500.txt};
-\addplot table[x index=0,y index=1,col sep=tab] {results/Expt3/clUCB20_500_1.txt};
-\addplot table[x index=0,y index=1,col sep=tab] {results/Expt3/MOSS20_500.txt};
-      \legend{ClusUCB(p=K/10),MOSS}
-      \end{axis}
-      \end{tikzpicture}
-      %}\\}
-			\caption{Experiment $3$: $20$ to $500$ Bernoulli-distributed arms with $r_{i_{{i}\neq {*}}}=0.05$ and $r^{*}=0.1$.}
-  \label{fig:3}
-  %\end{subfigure}
-  %\end{tabular}
-%\caption{Cumulative regret for various bandit algorithms on three stochastic K-armed bandit environments. }
-\label{fig:karmed}
-\end{figure*}
+\begin{figure}
+    \centering
+    \begin{tabular}{c}
+    \subfigure[]
+    {
+    		\pgfplotsset{
+		tick label style={font=\Large},
+		label style={font=\Large},
+		%legend style={font=\footnotesize}
+		}
+        \begin{tikzpicture}[scale=0.8]
+      	\begin{axis}[
+		xlabel={timestep},
+		ylabel={Error Percentage},
+		grid=major,
+        %clip mode=individual,grid,grid style={gray!30},
+        clip=true,
+        %clip mode=individual,
+  		legend style={at={(0.5,-0.2)},anchor=north, legend columns=3} ]
+      	% UCB
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB_Vcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/DMEDcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/KLUCBcomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/MOSScomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB1comp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/TScomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/clUCBcomp_subsampled.txt};
+      	\legend{UCB-V,DMED,KL-UCB,MOSS,UCB1,TS,ClusUCB(p=4)}
+      	\end{axis}
+      	\end{tikzpicture}
+  		\label{fig:4}
+    }
+	\end{tabular}
+    \caption{Experiment $4$: Cumulative regret for ClusUCB variants: $1,4,5,10$ correspond to number $p$ of clusters 				and A, S, B correspond to having only arm elimination, only cluster elimination and having both in 			Algorithm \ref{alg:clusucb}. For using just cluster elimination in ClusUCB, we stop when we left with only one cluster 	and play the max payoff arm of that cluster for the remaining time horizon. }
+  	\label{Fig:variousClus}
+\end{figure}
+
+%\begin{figure*}
+%\centering
+%  %\begin{tabular}{ccc}
+%%%%%% expt1  
+%  %\begin{subfigure}{0.32\textwidth}
+% %\tabl{c}{\scalebox{0.6}{
+% \begin{tikzpicture}
+%      \begin{axis}[
+%	xlabel={timestep},
+%	ylabel={Cumulative regret},
+%       clip mode=individual,grid,grid style={gray!30},
+%  legend style={at={(0.5,-0.2)},anchor=north,legend columns=3} ]  
+%  % UCB    
+%
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB_Vcomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/DMEDcomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/KLUCBcomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/MOSScomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB1comp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/TScomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/clUCBcomp_subsampled.txt};
+%      \legend{UCB-V,DMED,KL-UCB,MOSS,UCB1,TS,ClusUCB(p=4)}
+%      \end{axis}
+%      \end{tikzpicture}
+%      %}\\}
+%			\caption{Experiment $1$: $20$ Bernoulli-distributed arms with $r_{i_{{i}\neq {*}}}=0.07$ and $r^{*}=0.1$.}
+%  \label{fig:1}
+%  %\end{subfigure}
+%	%&
+%	%%%%%%% Expt 2
+%	  %\begin{subfigure}{0.32\textwidth}
+% %\tabl{c}{\scalebox{0.6}{
+% \begin{tikzpicture}
+%      \begin{axis}[
+%	xlabel={timestep},
+%	ylabel={Cumulative regret},
+%       clip mode=individual,grid,grid style={gray!30},
+%  legend style={at={(0.5,-0.2)},anchor=north,legend columns=3} ]
+%      % UCB
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/clUCBNCcomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/clUCBCcomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/Med_Elimcomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/UCB_Improvedcomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/MOSScomp_subsampled.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt2/UCB1comp_subsampled.txt};
+%      \legend{ClusUCB-AE(p=1),ClusUCB(p=20),Med-Elim,UCB-Improved,MOSS,UCB1}
+%      \end{axis}
+%      \end{tikzpicture}
+%      %}\\}
+%			\caption{Experiment $2$: $100$ Gaussian-distributed arms with $r_{i_{{i}\neq {*}:1-33}}=0.01$, $r_{i_{{i}\neq {*}:34-99}}=0.06$ and $r^{*}_{i=100}=0.1$.}
+%  \label{fig:2}
+%  %\end{subfigure}
+%	%&
+%	\end{figure*}		
+%	
+%	\begin{figure*}
+%	\centering
+%	%%%%%%% Expt 3
+%	  %\begin{subfigure}{0.32\textwidth}
+% %\tabl{c}{\scalebox{0.6}{
+% \begin{tikzpicture}
+%      \begin{axis}[
+%	xlabel={Arms},
+%	ylabel={Cumulative regret},
+%       clip mode=individual,grid,grid style={gray!30},
+%  legend style={at={(0.5,-0.2)},anchor=north,legend columns=-1} ]
+%      % UCB
+%%\addplot table[x index=0,y index=1,col sep=tab] {results/Expt3/clUCB20_500.txt};
+%\addplot table[x index=0,y index=1,col sep=tab] {results/Expt3/clUCB20_500_1.txt};
+%\addplot table[x index=0,y index=1,col sep=tab] {results/Expt3/MOSS20_500.txt};
+%      \legend{ClusUCB(p=K/10),MOSS}
+%      \end{axis}
+%      \end{tikzpicture}
+%      %}\\}
+%			\caption{Experiment $3$: $20$ to $500$ Bernoulli-distributed arms with $r_{i_{{i}\neq {*}}}=0.05$ and $r^{*}=0.1$.}
+%  \label{fig:3}
+%  %\end{subfigure}
+%  %\end{tabular}
+%%\caption{Cumulative regret for various bandit algorithms on three stochastic K-armed bandit environments. }
+%\label{fig:karmed}
+%\end{figure*}
 
 
 
@@ -135,38 +262,38 @@ Improved is poor in comparison to other algorithms, which is probably because of
 
 	The third experiment is conducted over a testbed of $20-500$ (interval of $10$) arms with Bernoulli reward distribution, where the expected rewards of the arms are $r_{i_{{i}\neq {*}}}=0.05$ and $r^{*}=0.1$. The horizon $T$ is set to $10^{5} + K^{2}\times 10^{4}$ and the number of arms are increased from $K=20$ to $500$. The proposed algorithm ClusUCB is run with $p=K/10$. The regret is averaged over $500$ independent runs and is shown in Figure \ref{fig:3}. We report the performance of MOSS and ClusUCB only over this setup. From the results in Figure \ref{fig:3}, it is evident that the growth of regret for ClusUCB is lower than that of MOSS. 
 
-\begin{figure}
-\centering
-  %\begin{tabular}{c}
-  %&
-  %%%%%%Expt4
-  %\begin{subfigure}{0.45\textwidth}
- %\tabl{c}{\scalebox{0.7}{
- \begin{tikzpicture}
-      \begin{axis}[
-	xlabel={timestep},
-	ylabel={Cumulative regret},
-       clip mode=individual,grid,grid style={gray!30},
-  legend style={at={(0.5,-0.2)},anchor=north, legend columns=4} ]
-      % UCB
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB1comp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB2comp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB3comp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/MOSScomp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB4comp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB5comp_subsampled.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/TScomp_subsampled.txt};
-      \legend{ClusUCB(1A),ClusUCB(4B),ClusUCB(10B),MOSS,ClusUCB(5S),ClusUCB(10S),TS}
-      %\legend{ClusUCB (NC, p=1),ClusUCB (C, p=4),ClusUCB(C, p=10) ,MOSS, ClusUCB(C, p=5, NAE), ClusUCB(C, p=10, NAE)}
-      %\legend{ClusUCB(1,A),ClusUCB(4,B),ClusUCB(10,B), MOSS,ClusUCB(5,S), ClusUCB(10,A)}
-      \end{axis}
-      \end{tikzpicture}
-      %}\\}
-			\caption{Experiment $4$: Cumulative regret for ClusUCB variants: $1,4,5,10$ correspond to number $p$ of clusters and A, S, B correspond to having only arm elimination, only cluster elimination and having both in Algorithm \ref{alg:clusucb}. For using just cluster elimination in ClusUCB, we stop when we left with only one cluster and play the max payoff arm of that cluster for the remaining time horizon. }
-  \label{Fig:variousClus}
-  %\end{subfigure}
-  %\end{tabular}
-\end{figure}
+%\begin{figure}
+%\centering
+%  %\begin{tabular}{c}
+%  %&
+%  %%%%%%Expt4
+%  %\begin{subfigure}{0.45\textwidth}
+% %\tabl{c}{\scalebox{0.7}{
+% \begin{tikzpicture}
+%      \begin{axis}[
+%	xlabel={timestep},
+%	ylabel={Cumulative regret},
+%       clip mode=individual,grid,grid style={gray!30},
+%  legend style={at={(0.5,-0.2)},anchor=north, legend columns=4} ]
+%      % UCB
+%		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB1comp_subsampled.txt};
+%		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB2comp_subsampled.txt};
+%		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB3comp_subsampled.txt};
+%		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/MOSScomp_subsampled.txt};
+%		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB4comp_subsampled.txt};
+%		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB5comp_subsampled.txt};
+%		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/TScomp_subsampled.txt};
+%      \legend{ClusUCB(1A),ClusUCB(4B),ClusUCB(10B),MOSS,ClusUCB(5S),ClusUCB(10S),TS}
+%      %\legend{ClusUCB (NC, p=1),ClusUCB (C, p=4),ClusUCB(C, p=10) ,MOSS, ClusUCB(C, p=5, NAE), ClusUCB(C, p=10, NAE)}
+%      %\legend{ClusUCB(1,A),ClusUCB(4,B),ClusUCB(10,B), MOSS,ClusUCB(5,S), ClusUCB(10,A)}
+%      \end{axis}
+%      \end{tikzpicture}
+%      %}\\}
+%			\caption{Experiment $4$: Cumulative regret for ClusUCB variants: $1,4,5,10$ correspond to number $p$ of clusters and A, S, B correspond to having only arm elimination, only cluster elimination and having both in Algorithm \ref{alg:clusucb}. For using just cluster elimination in ClusUCB, we stop when we left with only one cluster and play the max payoff arm of that cluster for the remaining time horizon. }
+%  \label{Fig:variousClus}
+%  %\end{subfigure}
+%  %\end{tabular}
+%\end{figure}
 
 
 	The fourth experiment is performed over a testbed having $20$ Bernoulli-distributed arms with $r_{i_{:{{i}\neq {*}}}}=0.06,\forall i\in A$ and $r^{*}=0.1$. In Figure \ref{Fig:variousClus}, we report the results with $T=60000$ averaged over $100$ independent runs for ClusUCB with  $p=\lbrace 1,4,10\rbrace$. Also, in this experiment we take $\psi = 1$ to make sure that the exploration is low. Under these conditions, exploration is low and the elimination parameters are decreased very fast. This leads to a greater number of errors committed by ClusUCB-AE that is ClusUCB($p=1$). Two other benchmark algorithms are considered here, MOSS which is one of our main competitors and TS which has performed near equivalently in experiment $1$(see Fig \ref{fig:1}). In this case we see that, since $\rho_{a}$ is decreased very fast, the optimal arm $a^{*}$ gets eliminated most of the time for no clustering $p=1$. While a balance of $p,\rho_{a}$ and $\rho_{s}$ gives a much better result. ClusUCB with $p=4$ and $10$ 
@@ -175,103 +302,135 @@ perform better than MOSS, while $p=1$ with just arm elimination does not converg
 \subsection*{Appendix B}
 \label{AppendixB}
 \begin{figure}
-\centering
-  %\begin{tabular}{c}
-  %&
-  %%%%%%Expt4
-  %\begin{subfigure}{0.45\textwidth}
- %\tabl{c}{\scalebox{0.7}{
- \begin{tikzpicture}
-      \begin{axis}[
-	xlabel={timestep},
-	ylabel={Error Percentage},
-       clip mode=individual,grid,grid style={gray!30},
-  legend style={at={(0.5,-0.2)},anchor=north, legend columns=4} ]
-      % UCB
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestAP/APT.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestAP/AugUCB.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestAP/UA.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestAP/UCBE_1.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestAP/UCBE_256.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestAP/UCBE_1_4.txt};
-      \legend{APT,AugUCBE,Unif Alloc,UCBE(1),UCBE(256),UCBE($\frac{1}{4}$)}
-      %\legend{ClusUCB (NC, p=1),ClusUCB (C, p=4),ClusUCB(C, p=10) ,MOSS, ClusUCB(C, p=5, NAE), ClusUCB(C, p=10, NAE)}
-      %\legend{ClusUCB(1,A),ClusUCB(4,B),ClusUCB(10,B), MOSS,ClusUCB(5,S), ClusUCB(10,A)}
-      \end{axis}
-      \end{tikzpicture}
-      %}\\}
-			\caption{Experiment $1$: Threshold Bandit with Arithmetic Progression}
-  \label{Fig:budgetExpt1}
-  %\end{subfigure}
-  %\end{tabular}
+    \centering
+    \begin{tabular}{ccc}
+    \subfigure[Experiment $1$: Threshold Bandit with Arithmetic Progression]
+    {
+    		\pgfplotsset{
+		tick label style={font=\Large},
+		label style={font=\Large},
+		%legend style={font=\footnotesize}
+		}
+        \begin{tikzpicture}[scale=0.5]
+      	\begin{axis}[
+		xlabel={timestep},
+		ylabel={Error Percentage},
+		grid=major,
+        %clip mode=individual,grid,grid style={gray!30},
+        clip=true,
+        %clip mode=individual,
+  		legend style={at={(0.5,-0.2)},anchor=north, legend columns=3} ]
+      	% UCB
+		\addplot table{results/budgetTestAP/APT1.txt};
+		\addplot table{results/budgetTestAP/AugUCB1.txt};
+		\addplot table{results/budgetTestAP/UCBE_1_41.txt};
+		\addplot table{results/budgetTestAP/UCBE_11.txt};
+		\addplot table{results/budgetTestAP/UCBE_2561.txt};
+		\addplot table{results/budgetTestAP/UA1.txt};
+      	\legend{APT,AugUCBE,UCBE($0.25$),UCBE(1),UCBE(256),Unif Alloc}
+      	\end{axis}
+      	\end{tikzpicture}
+  		\label{Fig:budgetExpt1}
+    }
+    %\\
+    &
+    \subfigure[Experiment $2$: Threshold Bandit with Geometric Progression ]
+    {
+    		\pgfplotsset{
+		tick label style={font=\Large},
+		label style={font=\Large},
+		%legend style={font=\footnotesize}
+		}
+        \begin{tikzpicture}[scale=0.5]
+        \begin{axis}[
+		xlabel={timestep},
+		ylabel={Error Percentage},
+        %clip mode=individual,grid,grid style={gray!30},
+       	grid=major,
+       	clip=true,
+  		legend style={at={(0.5,-0.2)},anchor=north, legend columns=3} ]
+      	% UCB
+		\addplot table{results/budgetTestGP/APT1.txt};
+		\addplot table{results/budgetTestGP/AugUCB1.txt};
+		\addplot table{results/budgetTestGP/UCBE_1_41.txt};
+		\addplot table{results/budgetTestGP/UCBE_11.txt};
+		\addplot table{results/budgetTestGP/UCBE_2561.txt};
+		\addplot table{results/budgetTestGP/UA1.txt};
+        \legend{APT,AugUCBE,UCBE($0.25$),UCBE(1),UCBE(256),Unif Alloc}
+      	\end{axis}
+      	\end{tikzpicture}
+   		\label{Fig:budgetExpt2} 
+    }
+    &
+    \subfigure[Experiment $3$: Threshold Bandit with $3$ Group Setting ]
+    {
+    		\pgfplotsset{
+		tick label style={font=\Large},
+		label style={font=\Large},
+		%legend style={font=\footnotesize}
+		}
+        \begin{tikzpicture}[scale=0.5]
+        \begin{axis}[
+		xlabel={timestep},
+		ylabel={Error Percentage},
+        %clip mode=individual,grid,grid style={gray!30},
+		grid=major,
+		clip=true,
+  		legend style={at={(0.5,-0.2)},anchor=north, legend columns=3} ]
+        % UCB
+		\addplot table{results/budgetTestGR/APT1.txt};
+		\addplot table{results/budgetTestGR/AugUCB1.txt};
+		\addplot table{results/budgetTestGR/UCBE_1_41.txt};
+		\addplot table{results/budgetTestGR/UCBE_11.txt};
+		\addplot table{results/budgetTestGR/UCBE_2561.txt};
+		\addplot table{results/budgetTestGR/UA1.txt};
+        \legend{APT,AugUCBE,UCBE($0.25$),UCBE(1),UCBE(256),Unif Alloc}
+      	\end{axis}
+      	\label{Fig:budgetExpt3}
+        \end{tikzpicture}
+    }
+    \end{tabular}
+    \caption{Experiments with thresholding bandit}
+    \label{fig:budgetExpt}
 \end{figure}
 
-	In this section we compare the empirical performance of AugUCB against APT, Unifirm Allocation and UCBE algorithm. The first experiment is conducted on a testbed of $10$ arms involving Bernoulli reward distribution with expected rewards of the arms $r_{1:4}=0.2+(0:3)*0.05$, $r_{5}=0.45$, $r_{6}=0.55$ and $r_{7:10}=0.65+(0:3)*0.05$. The means are set as arithmetic progression. The threshold $\tau$ is set at $0.5$. Each algorithm is run independently a $1000$ times for $500$ timesteps and the output set of arms suggested by the algorithms at every timestep is recorded. The output is considered erroneous if the correct set of arms is not $i=\lbrace 6,7,8,9,10 \rbrace$. The error percentage over $1000$ runs is plotted against $500$ timesteps. For the uniform allocation algorithm, for each $t=1,2,..,T$ the arms are sampled uniformly. For UCBE (\cite{audibert2009exploration}) algorithm which was built for single best arm identification, we modify it according to \cite{locatelli2016optimal} to suit the goal of finding arms above the threshold $\tau$. So the exploration parameter $a$ in UCBE is set to $a_{i}=4^{i}\dfrac{T-K}{H}$ for $i\in \lbrace -1,0,4 \rbrace$ and $H=\sum_{i=1}^{K}\dfrac{1}{\Delta_{i}^{2}}$ is defined as the problem complexity. In this experiment we see that AugUCB performs better than all the other algorithms mentioned. Only UCBE($1$) catches up with AugUCB and that is because it has access to the exact problem complexity. The result is shown in Figure \ref{Fig:budgetExpt1}.
+
+	In this section we compare the empirical performance of AugUCB against APT, Unifirm Allocation and UCBE algorithm. The threshold $\tau$ is set at $0.5$ for all experiments. Each algorithm is run independently a $1000$ times for $500$ timesteps and the output set of arms suggested by the algorithms at every timestep is recorded. The output is considered erroneous if the correct set of arms is not $i=\lbrace 6,7,8,9,10 \rbrace$ (true for all the experiments). The error percentage over $1000$ runs is plotted against $500$ timesteps. For the uniform allocation algorithm, for each $t=1,2,..,T$ the arms are sampled uniformly. For UCBE algorithm  (\cite{audibert2009exploration}) which was built for single best arm identification, we modify it according to \cite{locatelli2016optimal} to suit the goal of finding arms above the threshold $\tau$. So the exploration parameter $a$ in UCBE is set to $a_{i}=4^{i}\frac{T-K}{H}$ for $i\in \lbrace -1,0,4 \rbrace$ and $H=\sum_{i=1}^{K}\frac{1}{\Delta_{i}^{2}}$ is defined as the problem complexity. Then for each timestep $t=1,2,..,T$ we pull the arm that maximizes $\lbrace |\hat{r}_{i} -\tau|-\sqrt{\frac{a_{i}}{n_{i}}} \rbrace$, where $n_{i}$ is the number of times the arm $i$ is pulled till $t-1$ timestep. Also, APT is run with $\epsilon=0$, which denotes the precision with which the algorithm suggests the best set of arms. So when $\epsilon$ is  set to $0$ APT has to suggest the exact set of arms above the threshold. For AugUCB we take $\psi=K^{2}T$ and we initialize $\rho=\dfrac{1}{2^{m}}$ for $m=0,1,2,...,\gamma$. The high value of $\psi$ helps in improved exploration whereas we decrease $\rho$ sufficiently after every round to facilitate arm elimination.
 	
-\begin{figure}
-\centering
-  %\begin{tabular}{c}
-  %&
-  %%%%%%Expt4
-  %\begin{subfigure}{0.45\textwidth}
- %\tabl{c}{\scalebox{0.7}{
- \begin{tikzpicture}
-      \begin{axis}[
-	xlabel={timestep},
-	ylabel={Error Percentage},
-       clip mode=individual,grid,grid style={gray!30},
-  legend style={at={(0.5,-0.2)},anchor=north, legend columns=4} ]
-      % UCB
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGP/APT.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGP/AugUCB.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGP/UA.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGP/UCBE_1.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGP/UCBE_256.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGP/UCBE_1_4.txt};
-      \legend{APT,AugUCBE,Unif Alloc,UCBE(1),UCBE(256),UCBE($\frac{1}{4}$)}
-      %\legend{ClusUCB (NC, p=1),ClusUCB (C, p=4),ClusUCB(C, p=10) ,MOSS, ClusUCB(C, p=5, NAE), ClusUCB(C, p=10, NAE)}
-      %\legend{ClusUCB(1,A),ClusUCB(4,B),ClusUCB(10,B), MOSS,ClusUCB(5,S), ClusUCB(10,A)}
-      \end{axis}
-      \end{tikzpicture}
-      %}\\}
-			\caption{Experiment $2$: Threshold Bandit with Geometric Progression }
-  \label{Fig:budgetExpt2}
-  %\end{subfigure}
-  %\end{tabular}
-\end{figure}
-
+	The first experiment is conducted on a testbed of $10$ arms involving Bernoulli reward distribution with expected rewards of the arms $r_{1:4}=0.2+(0:3)*0.05$, $r_{5}=0.45$, $r_{6}=0.55$ and $r_{7:10}=0.65+(0:3)*0.05$. The means are set as arithmetic progression. In this experiment we see that AugUCB performs better than all the other algorithms mentioned. Only UCBE($1$) catches up with AugUCB and that is because it has access to the exact problem complexity. The result is shown in Figure \ref{Fig:budgetExpt1}.
+	
 	The second experiment is conducted on a testbed of $10$ arms with the means set as Geometric Progression. The testbed involves Bernoulli reward distribution with expected rewards of the arms as $r_{1:4}=0.4-(0.2)^{1:4}$, $r_{5}=0.45$, $r_{6}=0.55$ and $r_{7:10}=0.6+(0.2)^{5-(1:4)}$. AugUCB, APT, Uniform Allocation and UCBE with the same settings  as experiment $1$ are run on this testbed. The result is shown in Figure \ref{Fig:budgetExpt2}. Here, we see that AugUCB beats APT with only UCBE($1$) performing at par with AugUCB. 
 
-\begin{figure}
-\centering
+%\begin{figure}
+%\centering
   %\begin{tabular}{c}
   %&
   %%%%%%Expt4
   %\begin{subfigure}{0.45\textwidth}
  %\tabl{c}{\scalebox{0.7}{
- \begin{tikzpicture}
-      \begin{axis}[
-	xlabel={timestep},
-	ylabel={Error Percentage},
-       clip mode=individual,grid,grid style={gray!30},
-  legend style={at={(0.5,-0.2)},anchor=north, legend columns=4} ]
-      % UCB
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/APT.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/AugUCB.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/UA.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/UCBE_1.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/UCBE_256.txt};
-\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/UCBE_1_4.txt};
-      \legend{APT,AugUCBE,Unif Alloc,UCBE(1),UCBE(256),UCBE($\frac{1}{4}$)}
-      %\legend{ClusUCB (NC, p=1),ClusUCB (C, p=4),ClusUCB(C, p=10) ,MOSS, ClusUCB(C, p=5, NAE), ClusUCB(C, p=10, NAE)}
-      %\legend{ClusUCB(1,A),ClusUCB(4,B),ClusUCB(10,B), MOSS,ClusUCB(5,S), ClusUCB(10,A)}
-      \end{axis}
-      \end{tikzpicture}
-      %}\\}
-			\caption{Experiment $3$: Threshold Bandit with $3$ Group Setting }
-  \label{Fig:budgetExpt3}
+% \begin{tikzpicture}
+%      \begin{axis}[
+%	xlabel={timestep},
+%	ylabel={Error Percentage},
+%       clip mode=individual,grid,grid style={gray!30},
+%  legend style={at={(0.5,-0.2)},anchor=north, legend columns=4} ]
+%      % UCB
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/APT.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/AugUCB.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/UA.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/UCBE_1.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/UCBE_256.txt};
+%\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/budgetTestGR/UCBE_1_4.txt};
+%      \legend{APT,AugUCBE,Unif Alloc,UCBE(1),UCBE(256),UCBE($\frac{1}{4}$)}
+%      %\legend{ClusUCB (NC, p=1),ClusUCB (C, p=4),ClusUCB(C, p=10) ,MOSS, ClusUCB(C, p=5, NAE), ClusUCB(C, p=10, NAE)}
+%      %\legend{ClusUCB(1,A),ClusUCB(4,B),ClusUCB(10,B), MOSS,ClusUCB(5,S), ClusUCB(10,A)}
+%      \end{axis}
+%      \end{tikzpicture}
+%      %}\\}
+%			\caption{Experiment $3$: Threshold Bandit with $3$ Group Setting }
+%  \label{Fig:budgetExpt3}
   %\end{subfigure}
   %\end{tabular}
-\end{figure}
+%\end{figure}
 
-	The third experiment is conducted on a testbed of $10$ arms with the means divided into $3$ groups. Again the testbed involves Bernoulli reward distribution with expected rewards of the arms as $r_{1:3}=0.1$, $r_{4:7}=\lbrace 0.35,0.45,0.55,0.65\rbrace$ and $r_{8:10}=0.9$. AugUCB, APT, Uniform Allocation and UCBE with the same settings as experiment $1$ are run on this testbed. The result is shown in Figure \ref{Fig:budgetExpt3}. Here, we see that AugUCB beats APT.  
+	The third experiment is conducted on a testbed of $10$ arms with the means divided into $3$ groups. Again the testbed involves Bernoulli reward distribution with expected rewards of the arms as $r_{1:3}=0.1$, $r_{4:7}=\lbrace 0.35,0.45,0.55,0.65\rbrace$ and $r_{8:10}=0.9$. AugUCB, APT, Uniform Allocation and UCBE with the same settings as experiment $1$ are run on this testbed. The result is shown in Figure \ref{Fig:budgetExpt3}. Here, also we see that AugUCB beats APT.  
