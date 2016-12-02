@@ -114,14 +114,14 @@ For the purpose of performance comparison using cumulative regret as the metric,
         %clip mode=individual,
   		legend style={at={(0.5,-0.2)},anchor=north, legend columns=3} ]
       	% UCB
-		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB_Vcomp_subsampled.txt};
-		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/DMEDcomp_subsampled.txt};
-		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/KLUCBcomp_subsampled.txt};
-		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/MOSScomp_subsampled.txt};
-		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/UCB1comp_subsampled.txt};
-		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/TScomp_subsampled.txt};
-		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt1/clUCBcomp_subsampled.txt};
-      	\legend{UCB-V,DMED,KL-UCB,MOSS,UCB1,TS,ClusUCB(p=4)}
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB1comp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB2comp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB3comp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/MOSScomp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB4comp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/clUCB5comp_subsampled.txt};
+		\addplot table[x index=0,y index=1,col sep=tab,each nth point={10}] {results/Expt4/TScomp_subsampled.txt};
+      	\legend{ClusUCB(1A),ClusUCB(4B),ClusUCB(10B),MOSS,ClusUCB(5S),ClusUCB(10S),TS}
       	\end{axis}
       	\end{tikzpicture}
   		\label{fig:4}
