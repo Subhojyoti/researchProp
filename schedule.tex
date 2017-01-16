@@ -1,1 +1,17 @@
-%This paper presents the Augmented-UCB algorithm which is shown, theoretically and empirically, to have lower regret than UCB-Revisited \citep{auer2010ucb}, as long as the learning agent makes a reasonable guess of the tuning parameter $\epsilon$. Specifically, to the extnt that $\epsilon$ is guessed to be within the bounds set forth in \textbf{Theorem 2}, we show that the proposed method has a lower upper-bound on the regret than UCB-Revisited. The value $\epsilon$ is bounded as a function of $\Delta$ which is the minimum distance between the optimal arm and the sub-optimal arms. With large number of arms we can be very pessimistic about $\epsilon$, thus guessing a much lower value than $\Delta$, which actually increases the initial exploration. Also, this research seeks to motivate a novel approach to bandit problems by stacking bandit algorithms. In this study we conduct an initial exploration over the arms with UCB1 which results in faster elimination of arms, and stack it or augment it with a modified version of UCB-revisited, which uses two-arm deletions and early stopping conditions. A modification that can be proposed to our algorithm to use a variance estimation method over the existing algorithm as in \citep{audibert2009exploration}. Also making the number of pulls a function of number of arms in each round we improve the probability of deletion of arms. 
+In this section we present the schedule for the next 6 months. It is shown in Table \ref{tab:schedule}.
+
+\begin{table}
+\caption{Schedule for the next six months}
+\label{tab:schedule}
+\begin{center}
+\begin{tabular}{p{2cm}p{12cm}}
+\multicolumn{1}{c}{\bf Month} &\multicolumn{1}{c}{\bf Work to be done } 
+%\toprule
+%Month  & Work to be done \\
+\\\midrule
+January-February        &Based on the initial reviews from AISTATS, 2017 we have made further modifications to the ClusUCB algorithm and came up with Efficient ClusUCB algorithm. We will submit to ICML, 2017. \\\midrule
+January-February	&We will also want to come up with a short version of our AugUCB algorithm for the thresholding bandit problem for IJCAI, 2017.\\\midrule
+March-June	&Based on the two sets of reviews we wish to work further on these two setups. I also wish to work on restless bandits where these two algorithms can be applied (see \cite{garivier2011upper}).\\\midrule 
+\end{tabular}
+\end{center}
+\end{table}
