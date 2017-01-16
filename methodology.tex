@@ -116,27 +116,27 @@ Unlike \cite{liu2016modification}, we employ cluster as well as arm elimination 
 
 	We also approach the threshold bandit setup with a similar type of algorithm. The algorithm Augmented UCB is presented below:-
 
-%%%%%%%%%%%%%%%%% alg-custom-block %%%%%%%%%%%%
-%\algblock{ArmElim}{EndArmElim}
-%\algnewcommand\algorithmicArmElim{\textbf{\em Arm Elimination}}
-% \algnewcommand\algorithmicendArmElim{}
-%\algrenewtext{ArmElim}[1]{\algorithmicArmElim\ #1}
-%\algrenewtext{EndArmElim}{\algorithmicendArmElim}
-%\algtext*{EndArmElim}
+%%%%%%%%%%%%%%%% alg-custom-block %%%%%%%%%%%
+
+\algblock{ResetParam}{EndResetParam}
+\algnewcommand\algorithmicResetParam{\textbf{\em Reset Parameters}}
+ \algnewcommand\algorithmicendResetParam{}
+\algrenewtext{ResetParam}[1]{\algorithmicResetParam\ #1}
+\algrenewtext{EndResetParam}{\algorithmicendResetParam}
+\algtext*{EndResetParam}
 
 \begin{algorithm}[t]
 \caption{AugmentedUCB}
 \label{alg:augucb}
 \begin{algorithmic}
 \State {\bf Input:} Time horizon $T$, exploration parameters $\rho$ and $\psi$, threshold $\tau$.
-\State {\bf Initialization:} Set $B_{0}:=A$, $\gamma=\big\lfloor \dfrac{1}{2}\log_{2} \dfrac{T}{e}\big\rfloor $, $m:=0$, $N_{0}=\big\lfloor \dfrac{T}{\gamma} \big\rfloor$ and $\epsilon_{0}:=1$.
+\State {\bf Initialization:} Set $B_{0}:=A$, $M=\bigg\lfloor \dfrac{1}{2}\log_{2} \dfrac{T}{e}\bigg\rfloor $, $m:=0$, $\epsilon_{0}:=1$, $\ell_{0}=\big\lceil \dfrac{2\log(\psi T\epsilon_{0}^{2})}{\epsilon_{0}} \big\rceil$ and $N_{0}=K*\ell_{0} $.
 \State Pull each arm once
 %\State \For{$m=0,1,..\big \lfloor \dfrac{1}{2}\log_{2} \dfrac{T}{e}\big\rfloor$}{	
-%\State $N_{0}=\big\lfloor \dfrac{T}{\gamma} \big\rfloor$
+%\State $N_{0}=\big\lfloor \dfrac{T}{M} \big\rfloor$
 \State \For{$t=K+1,..,T$}{	
 \State Pull arm $i$ in $B_m$ such that $\min_{i\in B_{m}}\bigg\lbrace |\hat{r}_{i} - \tau | - \sqrt{\dfrac{\rho \log (\psi T \epsilon_{m}^{2})}{2 n_{i}}} \bigg\rbrace$, where $n_{i}$ is the number of times the arm $i$ has been pulled.
 \State $t:=t+1$ 
-\State \If{$t\geq N_{m}$}{
 \ArmElim
 \State For each arm $i \in B_{m}$, remove arm ${i}$ from $B_{m}$ if
 \begin{align*}
@@ -147,13 +147,17 @@ Unlike \cite{liu2016modification}, we employ cluster as well as arm elimination 
 \hat{r}_{i} - \sqrt{\dfrac{\rho\log{(\psi T\epsilon_{m}^{2})}}{2 n_{i}}}  > \tau +\sqrt{\dfrac{\rho\log{(\psi T\epsilon_{m}^{2})}}{2 n_{i}}} 
 \end{align*}
 \EndArmElim
+\State \If{$t\geq N_{m}$ and $m \leq M$}{
+\ResetParam
 \State $\epsilon_{m+1}:=\dfrac{\epsilon_{m}}{2}$
 \State $B_{m+1} := B_{m}$
 %\State $p_{m+1}:=p_{m}+1$
-%\State $\gamma := \dfrac{p+1}{p}$
-\State $N_{m+1} := N_{m} + \big\lfloor \dfrac{T}{\gamma} \big\rfloor$
-% + \lfloor\gamma N_{m}\rfloor $
+%\State $M := \dfrac{p+1}{p}$
+\State $\ell_{m+1}=\bigg\lceil \dfrac{2\log(\psi T\epsilon_{m+1}^{2})}{\epsilon_{m+1}} \bigg\rceil$
+\State $N_{m+1} := t + |B_{m+1}|\ell_{m+1}$
+% + \lfloorM N_{m}\rfloor $
 \State $m := m+1$
+\EndResetParam
 }
 }
 %\EndFor
@@ -164,7 +168,7 @@ Unlike \cite{liu2016modification}, we employ cluster as well as arm elimination 
 In algorithm \ref{alg:augucb}, hence referred to as AugUCB, we have three input parameters, $\rho$ which is the arm elimination parameter, $\psi$ which is the exploration regulatory factor and the threshold $\tau$. The salient features of the algorithm are listed below:-
 \begin{itemize}
 \item AugUCB combines the power of UCB-Improved (\cite{auer2010ucb}) , APT (\cite{locatelli2016optimal}) and SAR (\cite{gabillon2011multi}). The main approach is based on UCB-Improved with modifications suited for the thresholding bandit problem. The active set $B_{0}$ is initialized with all the arms from $A$.
-\item We divide the entire budget $T$ into rounds/phases as like UCB-Improved, SAR  and CSAR. The choice of $\gamma$ comes from UCB-Improved which necessarily entails that the $\epsilon_{m}\geq \sqrt{\frac{e}{T}}$. So, $\gamma$ is the total number of rounds and is the same as UCB-Improved. After the end of each such round $m$ we eliminate arm(s) from active set $B_{m}$ and update parameters.
+\item We divide the entire budget $T$ into rounds/phases as like UCB-Improved, SAR  and CSAR. The choice of $M$ comes from UCB-Improved which necessarily entails that the $\epsilon_{m}\geq \sqrt{\frac{e}{T}}$. So, $M$ is the total number of rounds and is the same as UCB-Improved. After the end of each such round $m$ we eliminate arm(s) from active set $B_{m}$ and update parameters.
 \item As suggested by \cite{liu2016modification} to make AugUCB an anytime algorithm and to overcome too much early exploration, we no longer pull all the arms equal number of times in each round but pull the arm that minimizes 
 \begin{align*}
 \bigg\lbrace |\hat{r}_{i} - \tau | - \sqrt{\dfrac{\rho \log (\psi T \epsilon_{m}^{2})}{2 n_{i}}} \bigg\rbrace

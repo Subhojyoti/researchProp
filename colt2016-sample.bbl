@@ -1,0 +1,190 @@
+\begin{thebibliography}{30}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Agrawal and Goyal(2011)]{agrawal2011analysis}
+Shipra Agrawal and Navin Goyal.
+\newblock Analysis of thompson sampling for the multi-armed bandit problem.
+\newblock \emph{arXiv preprint arXiv:1111.1797}, 2011.
+
+\bibitem[Audibert and Bubeck(2009)]{audibert2009minimax}
+Jean-Yves Audibert and S{\'e}bastien Bubeck.
+\newblock Minimax policies for adversarial and stochastic bandits.
+\newblock In \emph{COLT}, pages 217--226, 2009.
+
+\bibitem[Audibert et~al.(2009)Audibert, Munos, and
+  Szepesv{\'a}ri]{audibert2009exploration}
+Jean-Yves Audibert, R{\'e}mi Munos, and Csaba Szepesv{\'a}ri.
+\newblock Exploration--exploitation tradeoff using variance estimates in
+  multi-armed bandits.
+\newblock \emph{Theoretical Computer Science}, 410\penalty0 (19):\penalty0
+  1876--1902, 2009.
+
+\bibitem[Auer and Ortner(2010)]{auer2010ucb}
+Peter Auer and Ronald Ortner.
+\newblock Ucb revisited: Improved regret bounds for the stochastic multi-armed
+  bandit problem.
+\newblock \emph{Periodica Mathematica Hungarica}, 61\penalty0 (1-2):\penalty0
+  55--65, 2010.
+
+\bibitem[Auer et~al.(2002)Auer, Cesa-Bianchi, and Fischer]{auer2002finite}
+Peter Auer, Nicolo Cesa-Bianchi, and Paul Fischer.
+\newblock Finite-time analysis of the multiarmed bandit problem.
+\newblock \emph{Machine learning}, 47\penalty0 (2-3):\penalty0 235--256, 2002.
+
+\bibitem[Bertsekas and Tsitsiklis(1996)]{bertsekas1996neuro}
+Dimitri~P Bertsekas and John~N Tsitsiklis.
+\newblock Neuro-dynamic programming (optimization and neural computation
+  series, 3).
+\newblock \emph{Athena Scientific}, 7:\penalty0 15--23, 1996.
+
+\bibitem[Bubeck and Cesa-Bianchi(2012)]{bubeck2012regret}
+S{\'e}bastien Bubeck and Nicolo Cesa-Bianchi.
+\newblock Regret analysis of stochastic and nonstochastic multi-armed bandit
+  problems.
+\newblock \emph{arXiv preprint arXiv:1204.5721}, 2012.
+
+\bibitem[Bubeck et~al.(2011)Bubeck, Munos, and Stoltz]{bubeck2011pure}
+S{\'e}bastien Bubeck, R{\'e}mi Munos, and Gilles Stoltz.
+\newblock Pure exploration in finitely-armed and continuous-armed bandits.
+\newblock \emph{Theoretical Computer Science}, 412\penalty0 (19):\penalty0
+  1832--1852, 2011.
+
+\bibitem[Bubeck et~al.(2012)Bubeck, Cesa-Bianchi, and
+  Lugosi]{bubeck2012bandits}
+S{\'e}bastien Bubeck, Nicolo Cesa-Bianchi, and G{\'a}bor Lugosi.
+\newblock Bandits with heavy tail.
+\newblock \emph{arXiv preprint arXiv:1209.1727}, 2012.
+
+\bibitem[Bubeck et~al.(2013)Bubeck, Wang, and Viswanathan]{bubeck2013multiple}
+S{\'e}bastien Bubeck, Tengyao Wang, and Nitin Viswanathan.
+\newblock Multiple identifications in multi-armed bandits.
+\newblock In \emph{ICML (1)}, pages 258--265, 2013.
+
+\bibitem[Bui et~al.(2012)Bui, Johari, and Mannor]{bui2012clustered}
+Loc Bui, Ramesh Johari, and Shie Mannor.
+\newblock Clustered bandits.
+\newblock \emph{arXiv preprint arXiv:1206.4169}, 2012.
+
+\bibitem[Cappe et~al.(2012)Cappe, Garivier, and Kaufmann]{CapGarKau12}
+Olivier Cappe, Aurelien Garivier, and Emilie Kaufmann.
+\newblock pymabandits, 2012.
+\newblock \url{http://mloss.org/software/view/415/}.
+
+\bibitem[Chen et~al.(2014)Chen, Lin, King, Lyu, and
+  Chen]{chen2014combinatorial}
+Shouyuan Chen, Tian Lin, Irwin King, Michael~R Lyu, and Wei Chen.
+\newblock Combinatorial pure exploration of multi-armed bandits.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  379--387, 2014.
+
+\bibitem[Even-Dar et~al.(2006)Even-Dar, Mannor, and Mansour]{even2006action}
+Eyal Even-Dar, Shie Mannor, and Yishay Mansour.
+\newblock Action elimination and stopping conditions for the multi-armed bandit
+  and reinforcement learning problems.
+\newblock \emph{The Journal of Machine Learning Research}, 7:\penalty0
+  1079--1105, 2006.
+
+\bibitem[Gabillon et~al.(2011)Gabillon, Ghavamzadeh, Lazaric, and
+  Bubeck]{gabillon2011multi}
+Victor Gabillon, Mohammad Ghavamzadeh, Alessandro Lazaric, and S{\'e}bastien
+  Bubeck.
+\newblock Multi-bandit best arm identification.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  2222--2230, 2011.
+
+\bibitem[Gabillon et~al.(2012)Gabillon, Ghavamzadeh, and
+  Lazaric]{gabillon2012best}
+Victor Gabillon, Mohammad Ghavamzadeh, and Alessandro Lazaric.
+\newblock Best arm identification: A unified approach to fixed budget and fixed
+  confidence.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  3212--3220, 2012.
+
+\bibitem[Garivier and Capp{\'e}(2011)]{garivier2011kl}
+Aur{\'e}lien Garivier and Olivier Capp{\'e}.
+\newblock The kl-ucb algorithm for bounded stochastic bandits and beyond.
+\newblock \emph{arXiv preprint arXiv:1102.2490}, 2011.
+
+\bibitem[Gentile et~al.(2014)Gentile, Li, and Zappella]{gentile2014online}
+Claudio Gentile, Shuai Li, and Giovanni Zappella.
+\newblock Online clustering of bandits.
+\newblock In \emph{ICML}, pages 757--765, 2014.
+
+\bibitem[Ghavamzadeh et~al.(2015)Ghavamzadeh, Mannor, Pineau, Tamar,
+  et~al.]{ghavamzadeh2015bayesian}
+Mohammad Ghavamzadeh, Shie Mannor, Joelle Pineau, Aviv Tamar, et~al.
+\newblock \emph{Bayesian reinforcement learning: a survey}.
+\newblock World Scientific, 2015.
+
+\bibitem[Honda and Takemura(2010)]{honda2010asymptotically}
+Junya Honda and Akimichi Takemura.
+\newblock An asymptotically optimal bandit algorithm for bounded support
+  models.
+\newblock In \emph{COLT}, pages 67--79. Citeseer, 2010.
+
+\bibitem[Kalyanakrishnan et~al.(2012)Kalyanakrishnan, Tewari, Auer, and
+  Stone]{kalyanakrishnan2012pac}
+Shivaram Kalyanakrishnan, Ambuj Tewari, Peter Auer, and Peter Stone.
+\newblock Pac subset selection in stochastic multi-armed bandits.
+\newblock In \emph{Proceedings of the 29th International Conference on Machine
+  Learning (ICML-12)}, pages 655--662, 2012.
+
+\bibitem[Lai and Robbins(1985)]{lai1985asymptotically}
+Tze~Leung Lai and Herbert Robbins.
+\newblock Asymptotically efficient adaptive allocation rules.
+\newblock \emph{Advances in applied mathematics}, 6\penalty0 (1):\penalty0
+  4--22, 1985.
+
+\bibitem[Lattimore(2015)]{lattimore2015optimally}
+Tor Lattimore.
+\newblock Optimally confident ucb: Improved regret for finite-armed bandits.
+\newblock \emph{arXiv preprint arXiv:1507.07880}, 2015.
+
+\bibitem[Li et~al.(2010)Li, Chu, Langford, and Schapire]{li2010contextual}
+Lihong Li, Wei Chu, John Langford, and Robert~E Schapire.
+\newblock A contextual-bandit approach to personalized news article
+  recommendation.
+\newblock In \emph{Proceedings of the 19th international conference on World
+  wide web}, pages 661--670. ACM, 2010.
+
+\bibitem[Liu and Tsuruoka(2016)]{liu2016modification}
+Yun-Ching Liu and Yoshimasa Tsuruoka.
+\newblock Modification of improved upper confidence bounds for regulating
+  exploration in monte-carlo tree search.
+\newblock \emph{Theoretical Computer Science}, 2016.
+
+\bibitem[Locatelli et~al.(2016)Locatelli, Gutzeit, and
+  Carpentier]{locatelli2016optimal}
+Andrea Locatelli, Maurilio Gutzeit, and Alexandra Carpentier.
+\newblock An optimal algorithm for the thresholding bandit problem.
+\newblock \emph{arXiv preprint arXiv:1605.08671}, 2016.
+
+\bibitem[Nguyen and Lauw(2014)]{nguyen2014dynamic}
+Trong~T Nguyen and Hady~W Lauw.
+\newblock Dynamic clustering of contextual multi-armed bandits.
+\newblock In \emph{Proceedings of the 23rd ACM International Conference on
+  Conference on Information and Knowledge Management}, pages 1959--1962. ACM,
+  2014.
+
+\bibitem[Robbins(1952)]{robbins1952some}
+Herbert Robbins.
+\newblock Some aspects of the sequential design of experiments.
+\newblock In \emph{Herbert Robbins Selected Papers}, pages 169--177. Springer,
+  1952.
+
+\bibitem[Sutton and Barto(1998)]{sutton1998reinforcement}
+Richard~S Sutton and Andrew~G Barto.
+\newblock \emph{Reinforcement learning: An introduction}.
+\newblock MIT press, 1998.
+
+\bibitem[Thompson(1933)]{thompson1933likelihood}
+William~R Thompson.
+\newblock On the likelihood that one unknown probability exceeds another in
+  view of the evidence of two samples.
+\newblock \emph{Biometrika}, pages 285--294, 1933.
+
+\end{thebibliography}
